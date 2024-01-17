@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<form action="/employees/searchName" method="get">
+    <input type="text" id="searchInput" name="name"/>
+    <button type="submit">Search</button>
+</form>
+
+<form action="/employees/searchSalary" method="get">
+    <input type="text" id="low" name="lowSalary"/>
+    <input type="text" id="high" name="highSalary"/>
+    <button type="submit">Search</button>
+</form>
+<div  th:each="item : ${list}" >
+    <span th:text="${item.name}"></span>
+    <span th:text="${item.salary}"></span>
+    <a th:href="@{/employees/edit/__${item.id}__}">EDIT</a>
+    <a th:href="@{/employees/delete/__${item.id}__}">DELETE</a>
+</div>
+<a href="/employees/sort">Sort</a>
+<div th:if="${employeePage.totalPages > 1}">
+    <ul class="pagination">
+        <li th:class="${employeePage.number == 0} ? 'disabled' : ''">
+            <a th:href="@{/employees(page=0)}">First</a>
+        </li>
+        <li th:class="${employeePage.hasPrevious()} ? '' : 'disabled'">
+            <a th:href="@{/employees(page=${employeePage.number - 1})}">Previous</a>
+        </li>
+        <li th:each="page : ${#numbers.sequence(0, employeePage.totalPages - 1)}">
+            <a th:href="@{/employees(page=${page})}" th:text="${page + 1}"></a>
+        </li>
+        <li th:class="${employeePage.hasNext()} ? '' : 'disabled'">
+            <a th:href="@{/employees(page=${employeePage.number + 1})}">Next</a>
+        </li>
+        <li th:class="${employeePage.number == employeePage.totalPages - 1} ? 'disabled' : ''">
+            <a th:href="@{/employees(page=${employeePage.totalPages - 1})}">Last</a>
+        </li>
+    </ul>
+</div>
+</body>
+</html>
